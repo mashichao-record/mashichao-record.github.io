@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>朵朵的守护</title>
+  
+  <subtitle>朵朵的守护</subtitle>
+  <link href="https://mashichao-record.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://mashichao-record.github.io/"/>
+  <updated>2022-02-09T03:08:16.251Z</updated>
+  <id>https://mashichao-record.github.io/</id>
+  
+  <author>
+    <name>超超</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>test</title>
+    <link href="https://mashichao-record.github.io/2022/02/09/test/"/>
+    <id>https://mashichao-record.github.io/2022/02/09/test/</id>
+    <published>2022-02-09T03:08:16.000Z</published>
+    <updated>2022-02-09T03:08:16.251Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+</feed>
