@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="test, 朵朵的守护">
+    <meta name="keywords" content="记一次云上数据迁移过程, 朵朵的守护">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>test | 朵朵的守护</title>
+    <title>记一次云上数据迁移过程 | 朵朵的守护</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -311,12 +311,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">test</h1>
+                    <h1 class="description center-align post-title">记一次云上数据迁移过程</h1>
                 </div>
             </div>
         </div>
@@ -432,8 +432,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E9%95%9C%E5%83%8F%E8%BF%81%E7%A7%BB/">
-                                <span class="chip bg-color">镜像迁移</span>
+                            <a href="/tags/%E4%BA%91%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/">
+                                <span class="chip bg-color">云数据迁移</span>
                             </a>
                         
                     </div>
@@ -464,14 +464,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-02-09
+                    2022-02-10
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    8
+                    493
                 </div>
                 
 
@@ -498,7 +498,22 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="欢迎使用Markdown编辑器"><a href="#欢迎使用Markdown编辑器" class="headerlink" title="欢迎使用Markdown编辑器"></a>欢迎使用Markdown编辑器</h1>
+                <h1 id="应客户要求，需要将云上全部数据迁移到桌面云，特此记录迁移过程和思路。"><a href="#应客户要求，需要将云上全部数据迁移到桌面云，特此记录迁移过程和思路。" class="headerlink" title="应客户要求，需要将云上全部数据迁移到桌面云，特此记录迁移过程和思路。"></a><strong>应客户要求，需要将云上全部数据迁移到桌面云，特此记录迁移过程和思路。</strong></h1><h2 id="1-停机，制作系统盘镜像"><a href="#1-停机，制作系统盘镜像" class="headerlink" title="1.停机，制作系统盘镜像"></a>1.停机，制作系统盘镜像</h2><p>停机前建议先将数据进行物理备份。登上云控制台把要迁移的主机关机，点击制作镜像（该镜像只包含系统盘数据）并对镜像命名为image（任意即可）。点击控制台的云盘服务会看到镜像正在制作中，如果镜像制作失败或一直处于制作中状态，则需要登录云平台后台所有控制节点重启glance服务。制作正常镜像控制台界面上会显示状态为运行中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps | grep glance #查看运行glance服务的容器id号</span><br><span class="line">docker restart docker_id #根据id号重启容器</span><br></pre></td></tr></table></figure>
+<h2 id="2-下载系统盘镜像并格式转换"><a href="#2-下载系统盘镜像并格式转换" class="headerlink" title="2.下载系统盘镜像并格式转换"></a>2.下载系统盘镜像并格式转换</h2><p>登录云平台控制节点查看制作的系统盘image_id</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glance image-list | grep image</span><br></pre></td></tr></table></figure>
+<p> 根据image_id把它下载到控制节点的服务器，注意：所下载存放的目录需空间充足</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">glance image-download --progress --file /root/image.raw image_id</span><br><span class="line">#这里的image.raw，无论后缀格式是无或者其他，镜像都为raw格式</span><br></pre></td></tr></table></figure>
+<p>格式转换，按客户的要求转换为qcow2格式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">qemu-img convert -f raw -O qcow2  image.raw image.qcow2</span><br><span class="line">#qemu-img这个命令需要安装相关包 libvirt-daemon-system qemu-kvm qemu-utils virt-manager</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-数据盘的数据导出"><a href="#3-数据盘的数据导出" class="headerlink" title="3.数据盘的数据导出"></a>3.数据盘的数据导出</h2><p>先查看主机id，根据主机id查看主机信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nova list #列出所有主机</span><br><span class="line">nova show vm_id #找到主机和主机id查看信息</span><br></pre></td></tr></table></figure>
+<p>在os-extended-volumes:volumes_attached后为数据盘id号，如多个数据盘则会显示多个id号</p>
+<p> 通过rbd export 命令导出数据盘到本地</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbd export -p RbdPool --image volume-id号 --path /root/volume.raw </span><br></pre></td></tr></table></figure>
+<p>数据盘和系统盘一样，将raw格式转换为qcow2格式</p>
+<h2 id="4-用xftp或者scp命令把镜像传到桌面云的服务器即可"><a href="#4-用xftp或者scp命令把镜像传到桌面云的服务器即可" class="headerlink" title="4.用xftp或者scp命令把镜像传到桌面云的服务器即可"></a>4.用xftp或者scp命令把镜像传到桌面云的服务器即可</h2>
                 
             </div>
             <hr/>
@@ -524,7 +539,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://mashichao-record.github.io/2022/02/09/test/">https://mashichao-record.github.io/2022/02/09/test/</a>
+                    <a href="https://mashichao-record.github.io/2022/02/09/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%91%E4%B8%8A%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB%E8%BF%87%E7%A8%8B/">https://mashichao-record.github.io/2022/02/09/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%91%E4%B8%8A%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB%E8%BF%87%E7%A8%8B/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -562,8 +577,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E9%95%9C%E5%83%8F%E8%BF%81%E7%A7%BB/">
-                                    <span class="chip bg-color">镜像迁移</span>
+                                <a href="/tags/%E4%BA%91%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/">
+                                    <span class="chip bg-color">云数据迁移</span>
                                 </a>
                             
                         </div>
@@ -789,54 +804,18 @@ gitment.render('gitment-content');
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2022/02/09/test2/">
+                <a href="/2022/02/09/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%91%E4%B8%8A%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB%E8%BF%87%E7%A8%8B/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="test2">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="记一次云上数据迁移过程">
                         
-                        <span class="card-title">test2</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-02-09
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-user fa-fw"></i>
-                            超超
-                            
-                        </span>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
-            </div>
-            <div class="card">
-                <a href="/2022/02/09/test/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="test">
-                        
-                        <span class="card-title">test</span>
+                        <span class="card-title">记一次云上数据迁移过程</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -865,8 +844,58 @@ gitment.render('gitment-content');
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E9%95%9C%E5%83%8F%E8%BF%81%E7%A7%BB/">
-                        <span class="chip bg-color">镜像迁移</span>
+                    <a href="/tags/%E4%BA%91%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/">
+                        <span class="chip bg-color">云数据迁移</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                本篇&nbsp;<i class="far fa-dot-circle"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/02/09/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%91%E4%B8%8A%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB%E8%BF%87%E7%A8%8B/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="记一次云上数据迁移过程">
+                        
+                        <span class="card-title">记一次云上数据迁移过程</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-02-09
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%8A%80%E6%9C%AF/" class="post-category">
+                                    技术
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E4%BA%91%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/">
+                        <span class="chip bg-color">云数据迁移</span>
                     </a>
                     
                 </div>
@@ -1067,7 +1096,7 @@ gitment.render('gitment-content');
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">8</span>
+                        class="white-color">493</span>
             
             
             

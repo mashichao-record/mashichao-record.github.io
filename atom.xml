@@ -6,7 +6,7 @@
   <link href="https://mashichao-record.github.io/atom.xml" rel="self"/>
   
   <link href="https://mashichao-record.github.io/"/>
-  <updated>2022-02-09T03:11:09.742Z</updated>
+  <updated>2022-02-10T13:53:25.068Z</updated>
   <id>https://mashichao-record.github.io/</id>
   
   <author>
@@ -17,29 +17,16 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>test2</title>
-    <link href="https://mashichao-record.github.io/2022/02/09/test2/"/>
-    <id>https://mashichao-record.github.io/2022/02/09/test2/</id>
-    <published>2022-02-09T03:11:09.000Z</published>
-    <updated>2022-02-09T03:11:09.742Z</updated>
-    
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>test</title>
-    <link href="https://mashichao-record.github.io/2022/02/09/test/"/>
-    <id>https://mashichao-record.github.io/2022/02/09/test/</id>
+    <title>记一次云上数据迁移过程</title>
+    <link href="https://mashichao-record.github.io/2022/02/09/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%91%E4%B8%8A%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB%E8%BF%87%E7%A8%8B/"/>
+    <id>https://mashichao-record.github.io/2022/02/09/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%91%E4%B8%8A%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB%E8%BF%87%E7%A8%8B/</id>
     <published>2022-02-09T03:08:16.000Z</published>
-    <updated>2022-02-09T08:38:19.556Z</updated>
+    <updated>2022-02-10T13:53:25.068Z</updated>
     
     
       
       
-    <summary type="html">&lt;h1 id=&quot;欢迎使用Markdown编辑器&quot;&gt;&lt;a href=&quot;#欢迎使用Markdown编辑器&quot; class=&quot;headerlink&quot; title=&quot;欢迎使用Markdown编辑器&quot;&gt;&lt;/a&gt;欢迎使用Markdown编辑器&lt;/h1&gt;</summary>
+    <summary type="html">&lt;h1 id=&quot;应客户要求，需要将云上全部数据迁移到桌面云，特此记录迁移过程和思路。&quot;&gt;&lt;a href=&quot;#应客户要求，需要将云上全部数据迁移到桌面云，特此记录迁移过程和思路。&quot; class=&quot;headerlink&quot; title=&quot;应客户要求，需要将云上全部数据迁移到桌面云，特此</summary>
       
     
     
@@ -47,7 +34,7 @@
     <category term="技术" scheme="https://mashichao-record.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
     
     
-    <category term="镜像迁移" scheme="https://mashichao-record.github.io/tags/%E9%95%9C%E5%83%8F%E8%BF%81%E7%A7%BB/"/>
+    <category term="云数据迁移" scheme="https://mashichao-record.github.io/tags/%E4%BA%91%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/"/>
     
   </entry>
   

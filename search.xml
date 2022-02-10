@@ -4,24 +4,11 @@
   
     
     <entry>
-      <title>test2</title>
-      <link href="/2022/02/09/test2/"/>
-      <url>/2022/02/09/test2/</url>
+      <title>记一次云上数据迁移过程</title>
+      <link href="/2022/02/09/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%91%E4%B8%8A%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB%E8%BF%87%E7%A8%8B/"/>
+      <url>/2022/02/09/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BA%91%E4%B8%8A%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB%E8%BF%87%E7%A8%8B/</url>
       
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>test</title>
-      <link href="/2022/02/09/test/"/>
-      <url>/2022/02/09/test/</url>
-      
-        <content type="html"><![CDATA[<h1 id="欢迎使用Markdown编辑器"><a href="#欢迎使用Markdown编辑器" class="headerlink" title="欢迎使用Markdown编辑器"></a>欢迎使用Markdown编辑器</h1>]]></content>
+        <content type="html"><![CDATA[<h1 id="应客户要求，需要将云上全部数据迁移到桌面云，特此记录迁移过程和思路。"><a href="#应客户要求，需要将云上全部数据迁移到桌面云，特此记录迁移过程和思路。" class="headerlink" title="应客户要求，需要将云上全部数据迁移到桌面云，特此记录迁移过程和思路。"></a><strong>应客户要求，需要将云上全部数据迁移到桌面云，特此记录迁移过程和思路。</strong></h1><h2 id="1-停机，制作系统盘镜像"><a href="#1-停机，制作系统盘镜像" class="headerlink" title="1.停机，制作系统盘镜像"></a>1.停机，制作系统盘镜像</h2><p>停机前建议先将数据进行物理备份。登上云控制台把要迁移的主机关机，点击制作镜像（该镜像只包含系统盘数据）并对镜像命名为image（任意即可）。点击控制台的云盘服务会看到镜像正在制作中，如果镜像制作失败或一直处于制作中状态，则需要登录云平台后台所有控制节点重启glance服务。制作正常镜像控制台界面上会显示状态为运行中。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps | grep glance #查看运行glance服务的容器id号</span><br><span class="line">docker restart docker_id #根据id号重启容器</span><br></pre></td></tr></table></figure><h2 id="2-下载系统盘镜像并格式转换"><a href="#2-下载系统盘镜像并格式转换" class="headerlink" title="2.下载系统盘镜像并格式转换"></a>2.下载系统盘镜像并格式转换</h2><p>登录云平台控制节点查看制作的系统盘image_id</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glance image-list | grep image</span><br></pre></td></tr></table></figure><p> 根据image_id把它下载到控制节点的服务器，注意：所下载存放的目录需空间充足</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">glance image-download --progress --file /root/image.raw image_id</span><br><span class="line">#这里的image.raw，无论后缀格式是无或者其他，镜像都为raw格式</span><br></pre></td></tr></table></figure><p>格式转换，按客户的要求转换为qcow2格式</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">qemu-img convert -f raw -O qcow2  image.raw image.qcow2</span><br><span class="line">#qemu-img这个命令需要安装相关包 libvirt-daemon-system qemu-kvm qemu-utils virt-manager</span><br></pre></td></tr></table></figure><h2 id="3-数据盘的数据导出"><a href="#3-数据盘的数据导出" class="headerlink" title="3.数据盘的数据导出"></a>3.数据盘的数据导出</h2><p>先查看主机id，根据主机id查看主机信息</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nova list #列出所有主机</span><br><span class="line">nova show vm_id #找到主机和主机id查看信息</span><br></pre></td></tr></table></figure><p>在os-extended-volumes:volumes_attached后为数据盘id号，如多个数据盘则会显示多个id号</p><p> 通过rbd export 命令导出数据盘到本地</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbd export -p RbdPool --image volume-id号 --path /root/volume.raw </span><br></pre></td></tr></table></figure><p>数据盘和系统盘一样，将raw格式转换为qcow2格式</p><h2 id="4-用xftp或者scp命令把镜像传到桌面云的服务器即可"><a href="#4-用xftp或者scp命令把镜像传到桌面云的服务器即可" class="headerlink" title="4.用xftp或者scp命令把镜像传到桌面云的服务器即可"></a>4.用xftp或者scp命令把镜像传到桌面云的服务器即可</h2>]]></content>
       
       
       <categories>
@@ -33,7 +20,7 @@
       
         <tags>
             
-            <tag> 镜像迁移 </tag>
+            <tag> 云数据迁移 </tag>
             
         </tags>
       
